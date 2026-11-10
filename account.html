@@ -35,6 +35,17 @@
     <p id="msg" class="msg"></p>
 
     <hr>
+    <h3>Email</h3>
+    <p id="email-state">Loading...</p>
+    <label for="email-new">New email</label>
+    <input id="email-new" type="email" autocomplete="email" maxlength="254">
+    <label for="email-pw">Password</label>
+    <input id="email-pw" type="password" autocomplete="current-password" maxlength="128">
+    <button id="email-btn" type="button">Save email and send verification</button>
+    <button id="email-resend-btn" type="button" class="secondary" hidden>Resend verification email</button>
+    <p id="email-msg" class="msg"></p>
+
+    <hr>
     <h3>Security</h3>
     <label for="pw-current">Current password</label>
     <input id="pw-current" type="password" autocomplete="current-password" maxlength="128">

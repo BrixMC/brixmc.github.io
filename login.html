@@ -20,11 +20,16 @@
         <button type="button" id="tab-register">Register</button>
       </div>
       <form id="auth-form" method="post">
-        <label for="username">Username</label>
-        <input id="username" autocomplete="username" maxlength="16" required>
+        <label for="username" id="username-label">Username or email</label>
+        <input id="username" autocomplete="username" required>
+        <div id="email-row" hidden>
+          <label for="email">Email</label>
+          <input id="email" type="email" autocomplete="email" maxlength="254">
+        </div>
         <label for="password">Password</label>
         <input id="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required>
         <button id="submit" type="submit">Login</button>
+        <a id="forgot-link" class="link" href="forgot.html">Forgot password?</a>
       </form>
       <p id="msg" class="msg"></p>
     </div>

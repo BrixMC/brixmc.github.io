@@ -12,10 +12,13 @@ const store = {
 };
 
 const ERRORS = {
-  invalid_credentials: "Wrong username or password.",
+  invalid_credentials: "Wrong username/email or password. Email login only works once the email is verified.",
   username_taken: "That username is already taken.",
   invalid_username: "Username must be 3-16 characters: letters, numbers, underscore.",
   invalid_password: "Password must be 8-128 characters.",
+  invalid_email: "That email address does not look valid.",
+  email_in_use: "That email is already verified on another account.",
+  mail_failed: "We could not send the email. Try again later.",
   TooManyRequestsException: "Too many attempts. Try again in a few minutes.",
 };
 
@@ -69,6 +72,7 @@ async function finishLogin(token) {
   location.href = "account.html" + qs;
 }
 
+
 async function initLogin() {
   const msg = $("msg");
   let mode = "login";
@@ -78,11 +82,17 @@ async function initLogin() {
     $("tab-login").classList.toggle("active", m === "login");
     $("tab-register").classList.toggle("active", m === "register");
     $("submit").textContent = m === "login" ? "Login" : "Create account";
+    $("username-label").textContent = m === "login" ? "Username or email" : "Username";
+    $("username").maxLength = m === "login" ? 254 : 16;
+    $("email-row").hidden = m === "login";
+    $("email").required = m === "register";
+    $("forgot-link").hidden = m === "register";
     $("password").autocomplete = m === "login" ? "current-password" : "new-password";
     say(msg, "");
   }
   $("tab-login").addEventListener("click", () => setMode("login"));
   $("tab-register").addEventListener("click", () => setMode("register"));
+  setMode("login");
 
   $("auth-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -92,7 +102,8 @@ async function initLogin() {
       const username = $("username").value.trim();
       const password = $("password").value;
       if (mode === "register") {
-        const reg = await api("/register", { method: "POST", body: { username, password } });
+        const email = $("email").value.trim();
+        const reg = await api("/register", { method: "POST", body: { username, email, password } });
         if (!reg.ok) return say(msg, errText(reg), "err");
       }
       const r = await api("/login", { method: "POST", body: { username, password } });
@@ -117,6 +128,57 @@ async function initLogin() {
     await api("/logout", { method: "POST", token });
     store.clear();
     location.reload();
+  });
+}
+
+function takeToken() {
+  const token = new URLSearchParams(location.hash.slice(1)).get("token");
+  history.replaceState(null, "", location.pathname);
+  return token;
+}
+
+async function initVerify() {
+  const msg = $("msg");
+  const token = takeToken();
+  if (!token) return say(msg, "This verification link is not valid.", "err");
+  const r = await api("/email/verify", { method: "POST", body: { token } });
+  if (r.ok) say(msg, "Your email is verified. You can now log in with it.", "ok");
+  else if (r.data && r.data.error === "email_in_use") say(msg, errText(r), "err");
+  else say(msg, "This link is invalid or has expired. Request a new one from your account page.", "err");
+}
+
+function initForgot() {
+  $("forgot-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("submit").disabled = true;
+    const r = await api("/password/forgot", { method: "POST", body: { email: $("email").value.trim() } });
+    if (r.ok) say($("msg"), "If that email belongs to a verified account, we sent a reset link.", "ok");
+    else say($("msg"), errText(r), "err");
+    $("submit").disabled = false;
+  });
+}
+
+function initReset() {
+  const msg = $("msg");
+  const token = takeToken();
+  if (!token) {
+    $("reset-form").hidden = true;
+    return say(msg, "This reset link is not valid.", "err");
+  }
+  $("reset-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("submit").disabled = true;
+    const r = await api("/password/reset", { method: "POST", body: { token, newPassword: $("password").value } });
+    if (r.ok) {
+      $("reset-form").hidden = true;
+      $("to-login").hidden = false;
+      say(msg, "Password changed. You can log in now.", "ok");
+    } else {
+      say(msg, r.data && r.data.error === "invalid_token"
+        ? "This link is invalid or has expired. Request a new one."
+        : errText(r), "err");
+      $("submit").disabled = false;
+    }
   });
 }
 
@@ -240,6 +302,38 @@ async function initAccount() {
 
   loadSessions();
 
+  async function loadEmail() {
+    const r = await api("/account/me", { token });
+    if (!r.ok) return;
+    const { email, emailVerified } = r.data;
+    $("email-state").textContent = email
+      ? email + (emailVerified ? " (verified)" : " (not verified yet)")
+      : "No email on this account yet.";
+    $("email-resend-btn").hidden = !(email && !emailVerified);
+  }
+
+  $("email-btn").addEventListener("click", async () => {
+    const m = $("email-msg");
+    say(m, "Please wait...");
+    const r = await api("/account/email", {
+      method: "POST", token,
+      body: { email: $("email-new").value.trim(), password: $("email-pw").value },
+    });
+    if (r.ok) {
+      say(m, "Check your inbox for the verification link.", "ok");
+      $("email-pw").value = "";
+    } else {
+      say(m, r.status === 401 ? "Password is wrong." : errText(r), "err");
+    }
+  });
+
+  $("email-resend-btn").addEventListener("click", async () => {
+    const r = await api("/account/email/resend", { method: "POST", token });
+    say($("email-msg"), r.ok ? "Verification email sent." : errText(r), r.ok ? "ok" : "err");
+  });
+
+  loadEmail();
+
   $("logout-btn").addEventListener("click", async () => {
     await api("/logout", { method: "POST", token });
     store.clear();
@@ -252,3 +346,6 @@ async function initAccount() {
 const page = document.body.dataset.page;
 if (page === "login") initLogin();
 if (page === "account") initAccount();
+if (page === "verify") initVerify();
+if (page === "forgot") initForgot();
+if (page === "reset") initReset();

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src https://brix-api.brix-account.workers.dev; base-uri 'none'; form-action 'none'">
+  <title>Brix - Reset password</title>
+  <link rel="icon" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="reset">
+  <main class="card">
+    <img class="logo" src="logo.svg" alt="">
+    <h1>BRIX</h1>
+    <p class="sub">Choose a new password.</p>
+    <form id="reset-form" method="post">
+      <label for="password">New password (min. 8 characters)</label>
+      <input id="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" required>
+      <button id="submit" type="submit">Change password</button>
+    </form>
+    <p id="msg" class="msg"></p>
+    <a id="to-login" class="btn secondary" href="login.html" hidden>Go to login</a>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
