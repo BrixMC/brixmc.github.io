@@ -1,0 +1,44 @@
+:root { --ink:#0b1220; --accent:#1f6fb2; --err:#b3261e; --ok:#17633a; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; padding: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font: 16px/1.5 system-ui, sans-serif; color: var(--ink);
+  background: linear-gradient(135deg, #a0f0ff, #5a8fb5) fixed;
+}
+.card {
+  width: 100%; max-width: 420px; padding: 24px;
+  background: rgba(255,255,255,.85); border: 3px solid var(--ink);
+  border-radius: 6px; box-shadow: 6px 6px 0 var(--ink);
+}
+.logo { width: 56px; height: 56px; display: block; margin: 0 auto 8px; }
+h1 { margin: 0 0 4px; text-align: center; font-size: 28px; letter-spacing: 1px; }
+.sub { margin: 0 0 16px; text-align: center; opacity: .75; }
+label { display: block; margin: 12px 0 4px; font-weight: 600; }
+input, select {
+  width: 100%; padding: 10px; font: inherit;
+  border: 2px solid var(--ink); border-radius: 4px; background: #fff;
+}
+button, .btn {
+  display: block; width: 100%; margin-top: 14px; padding: 11px;
+  font: inherit; font-weight: 700; text-align: center; text-decoration: none;
+  color: #fff; background: var(--accent); cursor: pointer;
+  border: 2px solid var(--ink); border-radius: 4px;
+}
+button.secondary, .btn.secondary { color: var(--ink); background: #fff; }
+button:disabled { opacity: .6; cursor: default; }
+.tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+.tabs button { margin: 0; color: var(--ink); background: #fff; }
+.tabs button.active { color: #fff; background: var(--ink); }
+.msg { min-height: 1.5em; margin: 12px 0 0; text-align: center; }
+.msg.err { color: var(--err); }
+.msg.ok { color: var(--ok); }
+.mono { font-family: ui-monospace, monospace; font-size: 13px; word-break: break-all; }
+.center { text-align: center; }
+.pixel { image-rendering: pixelated; }
+.who { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.who canvas { width: 64px; height: 64px; border: 2px solid var(--ink); background: #fff; }
+.who h2 { margin: 0; font-size: 22px; }
+hr { margin: 20px 0 4px; border: 0; border-top: 2px solid var(--ink); }
+footer { margin-top: 18px; font-size: 12px; text-align: center; opacity: .7; }
+[hidden] { display: none !important; }

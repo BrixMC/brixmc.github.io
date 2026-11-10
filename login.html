@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src https://brix-api.brix-account.workers.dev; base-uri 'none'; form-action 'none'">
+  <title>Brix - Login</title>
+  <link rel="icon" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="login">
+  <main class="card">
+    <img class="logo" src="logo.svg" alt="">
+    <h1>BRIX</h1>
+    <p class="sub">Your Brix account</p>
+
+    <div id="auth-box">
+      <div class="tabs">
+        <button type="button" id="tab-login" class="active">Login</button>
+        <button type="button" id="tab-register">Register</button>
+      </div>
+      <form id="auth-form" method="post">
+        <label for="username">Username</label>
+        <input id="username" autocomplete="username" maxlength="16" required>
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required>
+        <button id="submit" type="submit">Login</button>
+      </form>
+      <p id="msg" class="msg"></p>
+    </div>
+
+    <div id="resume" hidden>
+      <p class="center">Signed in as <strong id="resume-name"></strong></p>
+      <button id="resume-btn" type="button">Continue</button>
+      <button id="switch-btn" type="button" class="secondary">Use another account</button>
+    </div>
+
+    <footer>Brix is not affiliated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.</footer>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://brix-api.brix-account.workers.dev; connect-src https://brix-api.brix-account.workers.dev; base-uri 'none'; form-action 'none'">
+  <title>Brix - Account</title>
+  <link rel="icon" href="logo.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="account">
+  <main class="card">
+    <div class="who">
+      <canvas id="face" width="64" height="64" class="pixel"></canvas>
+      <div>
+        <h2 id="name">...</h2>
+        <div id="uuid" class="mono"></div>
+      </div>
+    </div>
+
+    <hr>
+    <h3>Skin</h3>
+    <p id="skin-state">Loading...</p>
+    <div class="center"><img id="skin-img" class="pixel" width="128" height="128" alt="Current skin" hidden></div>
+
+    <label for="skin-file">Upload skin (PNG, 64x64 or 64x32, max 24 KB)</label>
+    <input id="skin-file" type="file" accept="image/png">
+    <label for="skin-model">Arm style</label>
+    <select id="skin-model">
+      <option value="default">Classic</option>
+      <option value="slim">Slim</option>
+    </select>
+    <button id="upload-btn" type="button">Upload skin</button>
+    <button id="delete-btn" type="button" class="secondary">Remove skin</button>
+    <p id="msg" class="msg"></p>
+
+    <hr>
+    <button id="logout-btn" type="button" class="secondary">Logout</button>
+    <footer>Brix is not affiliated with Mojang Studios or Microsoft.</footer>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
