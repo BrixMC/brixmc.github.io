@@ -42,3 +42,10 @@ button:disabled { opacity: .6; cursor: default; }
 hr { margin: 20px 0 4px; border: 0; border-top: 2px solid var(--ink); }
 footer { margin-top: 18px; font-size: 12px; text-align: center; opacity: .7; }
 [hidden] { display: none !important; }
+.sessions { list-style: none; margin: 0; padding: 0; }
+.sessions li {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,.15); font-size: 14px;
+}
+.sessions button { width: auto; margin: 0; padding: 6px 10px; }
+button.danger { background: var(--err); }

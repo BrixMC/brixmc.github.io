@@ -172,6 +172,74 @@ async function initAccount() {
     else say(msg, errText(r), "err");
   });
 
+  const when = (t) => new Date(t * 1000).toLocaleString();
+
+  async function loadSessions() {
+    const r = await api("/account/sessions", { token });
+    const list = $("session-list");
+    list.replaceChildren();
+    if (!r.ok) return say($("sess-msg"), errText(r), "err");
+    for (const s of r.data.sessions) {
+      const li = document.createElement("li");
+      const label = document.createElement("span");
+      label.textContent = (s.current ? "This browser - " : "") + "signed in " + when(s.createdAt);
+      li.append(label);
+      if (!s.current) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "secondary";
+        b.textContent = "Log out";
+        b.addEventListener("click", async () => {
+          await api("/account/sessions/revoke", { method: "POST", token, body: { id: s.id } });
+          loadSessions();
+        });
+        li.append(b);
+      }
+      list.append(li);
+    }
+  }
+
+  $("pw-btn").addEventListener("click", async () => {
+    const m = $("pw-msg");
+    say(m, "Please wait...");
+    const r = await api("/account/password", {
+      method: "POST", token,
+      body: { currentPassword: $("pw-current").value, newPassword: $("pw-new").value },
+    });
+    if (r.ok) {
+      say(m, "Password changed. Other devices were logged out.", "ok");
+      $("pw-current").value = "";
+      $("pw-new").value = "";
+      loadSessions();
+    } else {
+      say(m, r.status === 401 ? "Current password is wrong." : errText(r), "err");
+    }
+  });
+
+  $("revoke-others-btn").addEventListener("click", async () => {
+    const r = await api("/account/sessions/revoke-others", { method: "POST", token });
+    say($("sess-msg"), r.ok ? "Other devices logged out." : errText(r), r.ok ? "ok" : "err");
+    if (r.ok) loadSessions();
+  });
+
+  let armed = false;
+  $("del-btn").addEventListener("click", async () => {
+    const btn = $("del-btn");
+    if (!armed) {
+      armed = true;
+      btn.textContent = "Tap again to confirm";
+      setTimeout(() => { armed = false; btn.textContent = "Delete my account"; }, 5000);
+      return;
+    }
+    armed = false;
+    btn.textContent = "Delete my account";
+    const r = await api("/account/delete", { method: "POST", token, body: { password: $("del-pw").value } });
+    if (r.ok) { store.clear(); location.href = "index.html"; }
+    else say($("del-msg"), r.status === 401 ? "Password is wrong." : errText(r), "err");
+  });
+
+  loadSessions();
+
   $("logout-btn").addEventListener("click", async () => {
     await api("/logout", { method: "POST", token });
     store.clear();

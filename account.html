@@ -35,6 +35,28 @@
     <p id="msg" class="msg"></p>
 
     <hr>
+    <h3>Security</h3>
+    <label for="pw-current">Current password</label>
+    <input id="pw-current" type="password" autocomplete="current-password" maxlength="128">
+    <label for="pw-new">New password (min. 8 characters)</label>
+    <input id="pw-new" type="password" autocomplete="new-password" minlength="8" maxlength="128">
+    <button id="pw-btn" type="button">Change password</button>
+    <p id="pw-msg" class="msg"></p>
+
+    <h3>Devices</h3>
+    <ul id="session-list" class="sessions"></ul>
+    <button id="revoke-others-btn" type="button" class="secondary">Log out other devices</button>
+    <p id="sess-msg" class="msg"></p>
+
+    <hr>
+    <h3>Delete account</h3>
+    <p>This permanently removes your account, skin and sessions.</p>
+    <label for="del-pw">Password</label>
+    <input id="del-pw" type="password" autocomplete="current-password" maxlength="128">
+    <button id="del-btn" type="button" class="danger">Delete my account</button>
+    <p id="del-msg" class="msg"></p>
+
+    <hr>
     <button id="logout-btn" type="button" class="secondary">Logout</button>
     <footer>Brix is not affiliated with Mojang Studios or Microsoft.</footer>
   </main>
