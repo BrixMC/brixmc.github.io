@@ -108,6 +108,11 @@ async function initLogin() {
       }
       const r = await api("/login", { method: "POST", body: { username, password } });
       if (!r.ok) return say(msg, errText(r), "err");
+      if (mode === "register" && !launcherMode) {
+        store.set(r.data.accessToken);
+        location.href = "account.html#email";
+        return;
+      }
       await finishLogin(r.data.accessToken);
     } finally {
       $("submit").disabled = false;
@@ -320,7 +325,7 @@ async function initAccount() {
       body: { email: $("email-new").value.trim(), password: $("email-pw").value },
     });
     if (r.ok) {
-      say(m, "Check your inbox for the verification link.", "ok");
+      say(m, "Check your inbox for the 6-digit code, then enter it above.", "ok");
       $("email-pw").value = "";
     } else {
       say(m, r.status === 401 ? "Password is wrong." : errText(r), "err");
@@ -355,6 +360,23 @@ async function initAccount() {
   });
   api("/account/sessions", { token }).then((r) => {
     if (r.ok) $("ov-devices").textContent = String(r.data.sessions.length);
+  });
+
+  $("code-btn").addEventListener("click", async () => {
+    const m = $("email-msg");
+    const code = $("email-code").value.trim();
+    if (!/^[0-9]{6}$/.test(code)) return say(m, "Enter the 6-digit code from the email.", "err");
+    say(m, "Please wait...");
+    const r = await api("/email/verify-code", { method: "POST", token, body: { code } });
+    if (r.ok) {
+      say(m, "Email verified.", "ok");
+      $("email-code").value = "";
+      loadEmail();
+    } else if (r.data && (r.data.error === "TooManyRequestsException" || r.data.error === "email_in_use")) {
+      say(m, errText(r), "err");
+    } else {
+      say(m, "That code is wrong or has expired.", "err");
+    }
   });
 
   $("logout-btn").addEventListener("click", async () => {

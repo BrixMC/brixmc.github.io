@@ -74,6 +74,10 @@
         <div class="panel">
           <h3>Email</h3>
           <p id="email-state">Loading...</p>
+          <label for="email-code">Verification code (6 digits)</label>
+          <input id="email-code" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="6">
+          <button id="code-btn" type="button">Verify email</button>
+
           <label for="email-new">New email</label>
           <input id="email-new" type="email" autocomplete="email" maxlength="254">
           <label for="email-pw">Password</label>
