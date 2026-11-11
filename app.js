@@ -334,6 +334,29 @@ async function initAccount() {
 
   loadEmail();
 
+  $("hello").textContent = username;
+
+  const tabNames = ["overview", "skin", "email", "security", "devices"];
+  function showTab(name) {
+    if (!tabNames.includes(name)) name = "overview";
+    for (const t of tabNames) {
+      $("panel-" + t).hidden = t !== name;
+      $("nav-" + t).classList.toggle("active", t === name);
+    }
+  }
+  window.addEventListener("hashchange", () => showTab(location.hash.slice(1)));
+  showTab(location.hash.slice(1));
+
+  api("/account/me", { token }).then((r) => {
+    if (!r.ok) return;
+    $("ov-email").textContent = r.data.email
+      ? r.data.email + (r.data.emailVerified ? " (verified)" : " (not verified)")
+      : "No email yet. Add one in the Email tab.";
+  });
+  api("/account/sessions", { token }).then((r) => {
+    if (r.ok) $("ov-devices").textContent = String(r.data.sessions.length);
+  });
+
   $("logout-btn").addEventListener("click", async () => {
     await api("/logout", { method: "POST", token });
     store.clear();

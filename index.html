@@ -3,19 +3,98 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Brix is a Minecraft Java launcher for Android with its own accounts and skins.">
   <title>Brix Launcher</title>
   <link rel="icon" href="logo.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="card">
-    <img class="logo" src="logo.svg" alt="">
-    <h1>BRIX</h1>
-    <p class="sub">A Minecraft Java launcher for Android with its own accounts and skins.</p>
-    <a class="btn" href="login.html">Login / Register</a>
-    <a class="btn secondary" href="account.html">My account</a>
-    <footer>Brix is not affiliated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.</footer>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="index.html"><img src="logo.svg" alt=""><span>BRIX</span></a>
+      <nav class="nav-links">
+        <a class="hide-s" href="#features">Features</a>
+        <a class="hide-s" href="#how">How it works</a>
+        <a class="hide-s" href="#download">Download</a>
+        <a class="btn auto" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div>
+        <h1>Minecraft Java, with an account that is yours.</h1>
+        <p>Brix is a Minecraft Java launcher for Android with its own accounts and skins. Sign up with your email, pick a skin, and play.</p>
+        <div class="actions">
+          <a class="btn" href="#download">Download (beta)</a>
+          <a class="btn secondary" href="login.html">Create account</a>
+        </div>
+        <p class="note">Brix accounts work in single-player and on servers that support Brix login.</p>
+      </div>
+      <div class="cube-wrap" aria-hidden="true">
+        <div class="cube">
+          <div class="f-front"></div><div class="f-back"></div>
+          <div class="f-right"></div><div class="f-left"></div>
+          <div class="f-top"></div><div class="f-bottom"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="wrap section reveal">
+      <h2>Features</h2>
+      <p class="lead">Everything you need to manage your player account in one place.</p>
+      <div class="grid">
+        <div class="panel"><h3>Your own account</h3><p>Sign in with your email or your username, and reset your password by email.</p></div>
+        <div class="panel"><h3>Skins that show in game</h3><p>Upload a 64x64 skin once and it follows your account.</p></div>
+        <div class="panel"><h3>Built for landscape</h3><p>An Android launcher based on open-source work, laid out for playing sideways.</p></div>
+        <div class="panel"><h3>Control your devices</h3><p>See where you are signed in and log out other devices at any time.</p></div>
+        <div class="panel"><h3>Server ready</h3><p>Server owners can accept Brix accounts with authlib-injector.</p></div>
+        <div class="panel"><h3>Private by design</h3><p>Passwords are stored hashed and sign-in attempts are rate limited.</p></div>
+      </div>
+    </section>
+
+    <section id="how" class="wrap section reveal">
+      <h2>How it works</h2>
+      <p class="lead">Three steps from install to playing.</p>
+      <div class="grid steps">
+        <div class="panel step"><h3>Install</h3><p>Download the Brix launcher for Android.</p></div>
+        <div class="panel step"><h3>Create your account</h3><p>Register with your email and verify it from the message we send.</p></div>
+        <div class="panel step"><h3>Log in and play</h3><p>Open Brix Account inside the launcher, log in, and start a game.</p></div>
+      </div>
+    </section>
+
+    <section id="download" class="wrap section reveal">
+      <h2>Download</h2>
+      <div class="panel">
+        <h3>Brix Launcher for Android (beta)</h3>
+        <p>Requires Android 5.0 or newer. Beta builds can be unstable, so please report problems on GitHub.</p>
+        <div class="actions">
+          <a class="btn" href="https://github.com/BrixMC/brix-launcher/releases">Get it on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="wrap section reveal">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Can I join official Minecraft servers with a Brix account?</summary>
+        <p>No. Official servers verify accounts with Mojang and Microsoft. Brix accounts work in single-player and on servers that are set up to accept Brix login.</p>
+      </details>
+      <details>
+        <summary>Is Brix an official launcher?</summary>
+        <p>No. Brix is an unofficial launcher. Minecraft is a product of Mojang Studios and its terms apply.</p>
+      </details>
+      <details>
+        <summary>Is my data safe?</summary>
+        <p>Passwords are stored hashed, you can log out other devices from your account, and you can delete your account at any time.</p>
+      </details>
+    </section>
   </main>
+
+  <footer class="wrap site-footer">Brix is not affiliated with Mojang Studios or Microsoft. Minecraft is a trademark of Mojang Studios.</footer>
+  <script src="site.js" defer></script>
 </body>
 </html>

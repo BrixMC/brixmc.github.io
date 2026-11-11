@@ -4,73 +4,118 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://brix-api.brix-account.workers.dev; connect-src https://brix-api.brix-account.workers.dev; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="light dark">
   <title>Brix - Account</title>
   <link rel="icon" href="logo.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 <body data-page="account">
-  <main class="card">
-    <div class="who">
-      <canvas id="face" width="64" height="64" class="pixel"></canvas>
-      <div>
-        <h2 id="name">...</h2>
-        <div id="uuid" class="mono"></div>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="index.html"><img src="logo.svg" alt=""><span>BRIX</span></a>
+      <div class="nav-links">
+        <span id="name" class="chip">...</span>
+        <button id="logout-btn" type="button" class="secondary auto">Logout</button>
       </div>
     </div>
+  </header>
 
-    <hr>
-    <h3>Skin</h3>
-    <p id="skin-state">Loading...</p>
-    <div class="center"><img id="skin-img" class="pixel" width="128" height="128" alt="Current skin" hidden></div>
+  <div class="shell">
+    <nav class="side" aria-label="Account sections">
+      <a id="nav-overview" href="#overview" class="active">Overview</a>
+      <a id="nav-skin" href="#skin">Skin</a>
+      <a id="nav-email" href="#email">Email</a>
+      <a id="nav-security" href="#security">Security</a>
+      <a id="nav-devices" href="#devices">Devices</a>
+    </nav>
 
-    <label for="skin-file">Upload skin (PNG, 64x64 or 64x32, max 24 KB)</label>
-    <input id="skin-file" type="file" accept="image/png">
-    <label for="skin-model">Arm style</label>
-    <select id="skin-model">
-      <option value="default">Classic</option>
-      <option value="slim">Slim</option>
-    </select>
-    <button id="upload-btn" type="button">Upload skin</button>
-    <button id="delete-btn" type="button" class="secondary">Remove skin</button>
-    <p id="msg" class="msg"></p>
+    <main class="content">
+      <section id="panel-overview">
+        <div class="panel">
+          <div class="who">
+            <canvas id="face" width="64" height="64"></canvas>
+            <div>
+              <h2>Welcome, <span id="hello"></span></h2>
+              <div id="uuid" class="mono"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cols">
+          <div class="panel"><h3>Email</h3><p id="ov-email">Loading...</p></div>
+          <div class="panel"><h3>Devices</h3><p><strong id="ov-devices">-</strong> signed in</p><a href="#devices">Manage devices</a></div>
+          <div class="panel"><h3>Playing</h3><p>Log in to the Brix launcher with this account. Brix accounts work in single-player and on servers that support Brix login.</p></div>
+        </div>
+      </section>
 
-    <hr>
-    <h3>Email</h3>
-    <p id="email-state">Loading...</p>
-    <label for="email-new">New email</label>
-    <input id="email-new" type="email" autocomplete="email" maxlength="254">
-    <label for="email-pw">Password</label>
-    <input id="email-pw" type="password" autocomplete="current-password" maxlength="128">
-    <button id="email-btn" type="button">Save email and send verification</button>
-    <button id="email-resend-btn" type="button" class="secondary" hidden>Resend verification email</button>
-    <p id="email-msg" class="msg"></p>
+      <section id="panel-skin" hidden>
+        <div class="cols">
+          <div class="panel">
+            <h3>Current skin</h3>
+            <p id="skin-state">Loading...</p>
+            <div class="center"><img id="skin-img" class="pixel" width="128" height="128" alt="Current skin" hidden></div>
+          </div>
+          <div class="panel">
+            <h3>Upload a skin</h3>
+            <label for="skin-file">PNG, 64x64 or 64x32, max 24 KB</label>
+            <input id="skin-file" type="file" accept="image/png">
+            <label for="skin-model">Arm style</label>
+            <select id="skin-model">
+              <option value="default">Classic</option>
+              <option value="slim">Slim</option>
+            </select>
+            <button id="upload-btn" type="button">Upload skin</button>
+            <button id="delete-btn" type="button" class="secondary">Remove skin</button>
+            <p id="msg" class="msg"></p>
+          </div>
+        </div>
+      </section>
 
-    <hr>
-    <h3>Security</h3>
-    <label for="pw-current">Current password</label>
-    <input id="pw-current" type="password" autocomplete="current-password" maxlength="128">
-    <label for="pw-new">New password (min. 8 characters)</label>
-    <input id="pw-new" type="password" autocomplete="new-password" minlength="8" maxlength="128">
-    <button id="pw-btn" type="button">Change password</button>
-    <p id="pw-msg" class="msg"></p>
+      <section id="panel-email" hidden>
+        <div class="panel">
+          <h3>Email</h3>
+          <p id="email-state">Loading...</p>
+          <label for="email-new">New email</label>
+          <input id="email-new" type="email" autocomplete="email" maxlength="254">
+          <label for="email-pw">Password</label>
+          <input id="email-pw" type="password" autocomplete="current-password" maxlength="128">
+          <button id="email-btn" type="button">Save email and send verification</button>
+          <button id="email-resend-btn" type="button" class="secondary" hidden>Resend verification email</button>
+          <p id="email-msg" class="msg"></p>
+        </div>
+      </section>
 
-    <h3>Devices</h3>
-    <ul id="session-list" class="sessions"></ul>
-    <button id="revoke-others-btn" type="button" class="secondary">Log out other devices</button>
-    <p id="sess-msg" class="msg"></p>
+      <section id="panel-security" hidden>
+        <div class="cols">
+          <div class="panel">
+            <h3>Change password</h3>
+            <label for="pw-current">Current password</label>
+            <input id="pw-current" type="password" autocomplete="current-password" maxlength="128">
+            <label for="pw-new">New password (min. 8 characters)</label>
+            <input id="pw-new" type="password" autocomplete="new-password" minlength="8" maxlength="128">
+            <button id="pw-btn" type="button">Change password</button>
+            <p id="pw-msg" class="msg"></p>
+          </div>
+          <div class="panel">
+            <h3>Delete account</h3>
+            <p>This permanently removes your account, skin and sessions.</p>
+            <label for="del-pw">Password</label>
+            <input id="del-pw" type="password" autocomplete="current-password" maxlength="128">
+            <button id="del-btn" type="button" class="danger">Delete my account</button>
+            <p id="del-msg" class="msg"></p>
+          </div>
+        </div>
+      </section>
 
-    <hr>
-    <h3>Delete account</h3>
-    <p>This permanently removes your account, skin and sessions.</p>
-    <label for="del-pw">Password</label>
-    <input id="del-pw" type="password" autocomplete="current-password" maxlength="128">
-    <button id="del-btn" type="button" class="danger">Delete my account</button>
-    <p id="del-msg" class="msg"></p>
-
-    <hr>
-    <button id="logout-btn" type="button" class="secondary">Logout</button>
-    <footer>Brix is not affiliated with Mojang Studios or Microsoft.</footer>
-  </main>
+      <section id="panel-devices" hidden>
+        <div class="panel">
+          <h3>Devices</h3>
+          <ul id="session-list" class="sessions"></ul>
+          <button id="revoke-others-btn" type="button" class="secondary">Log out other devices</button>
+          <p id="sess-msg" class="msg"></p>
+        </div>
+      </section>
+    </main>
+  </div>
   <script src="app.js" defer></script>
 </body>
 </html>
